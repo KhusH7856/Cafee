@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brewly | Premium Coffee</title>
+    <!-- Google Fonts: Cormorant Garamond (Editorial Serif) & Plus Jakarta Sans (Clean Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght=0,300;0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght=300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- AOS Library CSS for Scroll Animations -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+    
+    <style>
+        /* Color System */
+        :root {
+            --brand-brown: #6F4E37;
+            --brand-cream: #FFF8F0;
+            --white: #FFFFFF;
+            
+            /* Derived shades for text contrast & subtle borders */
+            --text-dark: #453022; 
+            --text-muted: #8E705C;
+            --border-light: rgba(111, 78, 55, 0.12);
+            --border-medium: rgba(111, 78, 55, 0.25);
+            
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Reset & Global */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--brand-cream);
+            color: var(--text-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-family: var(--font-serif);
+            font-weight: 400;
+        }
+
+        /* Navigation Header */
+        header {
+            border-bottom: 1px solid var(--border-light);
+            background-color: var(--brand-cream);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 90px;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.7rem;
+            letter-spacing: 1px;
+            color: var(--brand-brown);
+            text-decoration: none;
+            font-weight: 500;
+            z-index: 101; /* Stays above menu */
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 400;
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            color: var(--brand-brown);
+            opacity: 0.8;
+        }
+
+        /* Utility CTA Button */
+        .btn-buy {
+            display: inline-block;
+            background-color: var(--brand-brown);
+            color: var(--brand-cream);
+            text-decoration: none;
+            padding: 12px 32px;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border-radius: 2px;
+            border: 1px solid var(--brand-brown);
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .btn-buy:hover {
+            background-color: var(--brand-cream);
+            color: var(--brand-brown);
+        }
+
+        .btn-secondary {
+            display: inline-block;
+            color: var(--brand-brown);
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--brand-brown);
+            padding-bottom: 4px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-secondary:hover {
+            opacity: 0.7;
+        }
+
+        /* Hamburger Button */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 16px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        .hamburger span {
+            width: 100%;
+            height: 1.5px;
+            background-color: var(--brand-brown);
+            transition: var(--transition);
+        }
+
+        /* Hamburger Active State */
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* Mobile Drawer Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--brand-cream);
+            z-index: 99;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 32px;
+            transition: var(--transition);
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            transition: var(--transition);
+        }
+
+        .mobile-menu a:hover {
+            color: var(--brand-brown);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 100px 0;
+            min-height: calc(100vh - 90px);
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .hero-meta {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--brand-brown);
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 32px;
+            color: var(--text-dark);
+        }
+
+        .hero h1 span {
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        .hero-desc {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            max-width: 520px;
+            font-weight: 300;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        /* Editorial Image Container */
+        .hero-visual {
+            position: relative;
+            background-color: var(--white);
+            padding: 24px;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+        }
+
+        .hero-image-wrapper {
+            overflow: hidden;
+            aspect-ratio: 3/4;
+            background-color: var(--brand-cream);
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.95;
+            transition: var(--transition);
+        }
+
+        .hero-visual:hover .hero-image {
+            transform: scale(1.02);
+        }
+
+        /* Editorial Features Section */
+        .features {
+            background-color: var(--white);
+            padding: 120px 0;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .features-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 80px;
+            align-items: end;
+        }
+
+        .features-header h2 {
+            font-size: 3rem;
+            color: var(--text-dark);
+            line-height: 1.1;
+        }
+
+        .features-header p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            max-width: 480px;
+        }
+
+        /* Clean List Layout */
+        .features-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+        }
+
+        .feature-item {
+            border-top: 1px solid var(--border-medium);
+            padding-top: 32px;
+        }
+
+        .feature-num {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-style: italic;
+            color: var(--brand-brown);
+            margin-bottom: 24px;
+            display: block;
+        }
+
+        .feature-item h3 {
+            font-size: 1.6rem;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .feature-item p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        /* Premium Minimalist Footer */
+        footer {
+            background-color: var(--brand-cream);
+            border-top: 1px solid var(--border-light);
+            padding: 100px 0 40px 0;
+            color: var(--text-dark);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr 0.8fr 1.2fr;
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .footer-brand p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-top: 20px;
+            max-width: 260px;
+            font-weight: 300;
+        }
+
+        .footer-col h4 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--brand-brown);
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-col a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            transition: var(--transition);
+            font-weight: 300;
+        }
+
+        .footer-col a:hover {
+            color: var(--brand-brown);
+        }
+
+        .footer-newsletter p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .newsletter-form {
+            display: flex;
+            border-bottom: 1px solid var(--border-medium);
+            padding-bottom: 8px;
+        }
+
+        .newsletter-form input {
+            background: transparent;
+            border: none;
+            outline: none;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            flex-grow: 1;
+        }
+
+        .newsletter-form input::placeholder {
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        .newsletter-form button {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--brand-brown);
+            transition: var(--transition);
+        }
+
+        .newsletter-form button:hover {
+            transform: translateX(4px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-light);
+            padding-top: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-legal a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-legal a:hover {
+            color: var(--brand-brown);
+        }
+
+        /* Responsive Layouts */
+        @media (max-width: 991px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 60px;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 3.2rem;
+            }
+
+            .hero-desc {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                max-width: 420px;
+                margin: 0 auto;
+            }
+
+            .features-header {
+                grid-template-columns: 1fr;
+                gap: 24px;
+                margin-bottom: 60px;
+            }
+
+            .features-list {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 48px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav, .header-wrapper-cta {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-wrapper {
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 36px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navigation -->
+    <header>
+        <div class="container nav-wrapper">
+            <a href="#" class="logo">Brewly</a>
+            <nav>
+                <ul>
+                    <li><a href="#about">Our Story</a></li>
+                    <li><a href="#features">The Craft</a></li>
+                    <li><a href="#shop">Offerings</a></li>
+                </ul>
+            </nav>
+            <div class="header-wrapper-cta">
+                <a href="#shop" class="btn-buy">Buy Now</a>
+            </div>
+            
+            <!-- Mobile Hamburger Button -->
+            <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#about" class="mobile-link">Our Story</a>
+        <a href="#features" class="mobile-link">The Craft</a>
+        <a href="#shop" class="mobile-link">Offerings</a>
+        <a href="#shop" class="btn-buy mobile-link" style="margin-top: 16px;">Buy Now</a>
+    </div>
+
+    <!-- Main Content Area -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-grid">
+                    <div class="hero-content" data-aos="fade-up">
+                        <div class="hero-meta">Consciously Sourced • Artfully Roasted</div>
+                        <h1>Slow-roasted for <br><span>cozy mornings</span>.</h1>
+                        <p class="hero-desc">
+                            A curated collection of single-origin beans, roasted with patience in micro-batches to bring unmatched warmth and rich, delicate notes to your daily cup.
+                        </p>
+                        <div class="hero-actions">
+                            <a href="#shop" class="btn-buy">Buy Now</a>
+                            <a href="#features" class="btn-secondary">Explore the Process</a>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-visual" data-aos="fade-left" data-aos-delay="200">
+                        <div class="hero-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=1200&auto=format&fit=crop" alt="Pour over coffee brewer" class="hero-image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features" id="features">
+            <div class="container">
+                <div class="features-header" data-aos="fade-up">
+                    <h2>Honoring the journey of the bean.</h2>
+                    <p>We work directly with exceptional family farms to bring you sustainably grown, seasonal lots that celebrate purity and origin profile.</p>
+                </div>
+                
+                <div class="features-list">
+                    <!-- Feature Item 1 -->
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="100">
+                        <span class="feature-num">I / Origin</span>
+                        <h3>Direct Sourcing</h3>
+                        <p>Our beans are selected directly from high-altitude estates, promoting sustainable farming practices and ensuring equitable trade at every single step.</p>
+                    </div>
+                    
+                    <!-- Feature Item 2 -->
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="200">
+                        <span class="feature-num">II / Roast</span>
+                        <h3>Bespoke Profiles</h3>
+                        <p>We adjust variables micro-second by micro-second, designing specific roast profiles that tease out the subtle floral, fruity, or chocolate undertones of each harvest.</p>
+                    </div>
+                    
+                    <!-- Feature Item 3 -->
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="300">
+                        <span class="feature-num">III / Experience</span>
+                        <h3>Cozy Simplicity</h3>
+                        <p>Our coffee is roasted and immediately packed to order, arriving at your doorstep in its absolute prime, ready to transform your morning ritual into an escape.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="container footer-grid">
+            <div class="footer-brand" data-aos="fade-up">
+                <a href="#" class="logo">Brewly</a>
+                <p>Bringing slow mornings and warm ritual directly to your cup through small-batch specialty coffee.</p>
+            </div>
+            
+            <div class="footer-col" data-aos="fade-up" data-aos-delay="100">
+                <h4>Offerings</h4>
+                <ul>
+                    <li><a href="#shop">Signature Blends</a></li>
+                    <li><a href="#">Single Origins</a></li>
+                    <li><a href="#">Coffee Subscriptions</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col" data-aos="fade-up" data-aos-delay="200">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#about">Our Story</a></li>
+                    <li><a href="#">Brew Guides</a></li>
+                    <li><a href="#">Sustainability</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col footer-newsletter" data-aos="fade-up" data-aos-delay="300">
+                <h4>Join the Journal</h4>
+                <p>Receive slow brewing guides, new batch announcements, and micro-lot releases.</p>
+                <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Thank you for subscribing!');">
+                    <input type="email" placeholder="Your email address" required>
+                    <button type="submit" aria-label="Subscribe">→</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="container footer-bottom">
+            <p>&copy; 2026 Brewly Coffee Co. All rights reserved.</p>
+            <div class="footer-legal">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Use</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AOS Script (Animate On Scroll) -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Initialize AOS animations
+        AOS.init({
+            duration: 900,
+            once: true,
+            offset: 120,
+            easing: 'ease-out-quad'
+        });
+
+        // Hamburger Menu Logic
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            
+            // Prevent scrolling on body when mobile menu is active
+            if (mobileMenu.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
+
+        hamburger.addEventListener('click', toggleMenu);
+
+        // Close menu when clicking a navigation link
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+    </script>
+</body>
+</html>
